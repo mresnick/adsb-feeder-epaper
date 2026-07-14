@@ -86,23 +86,12 @@ class EPD:
         epdconfig.delay_ms(200)
         logger.debug("e-Paper busy H release")
 
+    # Matches the C reference driver (EPD_3in52b.c); the sequence previously
+    # here was carried over from epd7in3f and rewrote the booster register
+    # with values for a different panel, leaving black undeveloped and red
+    # washed out.
     def TurnOnDisplay(self):
-        self.send_command(0x04) # POWER_ON
-        self.ReadBusyH()
-
-        self.send_command(0x06)
-        self.send_data(0x6F)
-        self.send_data(0x1F)
-        self.send_data(0x17)
-        self.send_data(0x27)
-        epdconfig.delay_ms(200)
-
         self.send_command(0x12) # DISPLAY_REFRESH
-        self.send_data(0X00)
-        self.ReadBusyH()
-        
-        self.send_command(0x02) # POWER_OFF
-        self.send_data(0X00)
         self.ReadBusyH()
         
     def init(self):
@@ -129,7 +118,7 @@ class EPD:
         self.send_command(0x06)
         self.send_data(0x2F)
         self.send_data(0x2F)
-        self.send_data(0x2F)
+        self.send_data(0x2E)
 
         self.ReadBusyH()
         return 0
@@ -174,10 +163,10 @@ class EPD:
         
     def Clear(self):
         self.send_command(0x10)
-        self.send_data2([0x00] * int(self.height) * int(self.width/2))
+        self.send_data2([0x00] * (self.height * self.width // 8))
 
         self.send_command(0x13)
-        self.send_data2([0x00] * int(self.height) * int(self.width/2))
+        self.send_data2([0x00] * (self.height * self.width // 8))
 
         self.TurnOnDisplay()
 

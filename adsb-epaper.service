@@ -1,0 +1,17 @@
+[Unit]
+Description=ADS-B feeder e-paper status display
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 -m adsb_epaper.main
+WorkingDirectory=/opt/adsb-epaper
+Restart=on-failure
+RestartSec=15
+# GPIO/SPI access; state dir for daily stats
+User=root
+StateDirectory=adsb-epaper
+
+[Install]
+WantedBy=multi-user.target

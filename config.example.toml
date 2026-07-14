@@ -1,0 +1,41 @@
+# ADS-B e-paper display configuration.
+# Copy to /etc/adsb-epaper/config.toml (or ./config.toml) and edit.
+# Every key is optional; the defaults below match an adsb.im feeder image.
+
+[source]
+# Tried in order until aircraft.json answers.
+base_urls = [
+    "http://127.0.0.1/tar1090/data",
+    "http://127.0.0.1:8080/data",
+]
+http_timeout = 5.0
+# Receiver location used for range stats. Normally auto-read from
+# receiver.json; set these only if that file has no position.
+# lat = 40.123
+# lon = -74.456
+
+[timing]
+poll_seconds = 30        # data sampling cadence
+refresh_seconds = 300    # panel redraw cadence (full refresh flashes)
+min_refresh_seconds = 180  # hard floor; Waveshare's guidance for 3-colour panels
+stale_data_seconds = 90  # aircraft.json older than this -> NO DATA alert
+
+[display]
+driver = "auto"          # auto | epd | png
+rotate_180 = false       # flip if the enclosure mounts the panel upside down
+units = "nm"             # nm | km | mi
+history_hours = 6        # sparkline window
+
+[alerts]
+temp_warn_c = 75.0
+ram_warn_pct = 90.0
+disk_warn_pct = 90.0
+
+[webui]
+# Serves the current panel frame at http://<feeder-ip>:<port>/
+enabled = true
+port = 8099
+bind = "0.0.0.0"
+
+[state]
+path = "/var/lib/adsb-epaper/state.json"

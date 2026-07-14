@@ -33,23 +33,22 @@ def _font(name: str, size: int) -> ImageFont.FreeTypeFont:
 
 
 class Fonts:
-    """Noto Sans Bold for content (user-picked from a sample sheet),
-    sized a step up from the original design.  Everything bold: 1px
-    stems don't develop reliably on B/W/R panels.  The header bar and
-    its ✈ glyph stay DejaVu Sans Bold."""
+    """DejaVu Sans Bold throughout, sized a step up from the original
+    design.  Everything bold: 1px stems don't develop reliably on
+    B/W/R panels."""
 
     def __init__(self, scale: int = 1) -> None:
         self.header = _font("DejaVuSans-Bold.ttf", 13 * scale)
         self.glyph = _font("DejaVuSans-Bold.ttf", 13 * scale)
-        self.hero = _font("NotoSans-Bold.ttf", 56 * scale)
-        self.hero_small = _font("NotoSans-Bold.ttf", 38 * scale)
-        self.label = _font("NotoSans-Bold.ttf", 12 * scale)
-        self.value = _font("NotoSans-Bold.ttf", 24 * scale)
-        self.unit = _font("NotoSans-Bold.ttf", 13 * scale)
-        self.small = _font("NotoSans-Bold.ttf", 11 * scale)
-        self.foot_label = _font("NotoSans-Bold.ttf", 10 * scale)
-        self.foot_value = _font("NotoSans-Bold.ttf", 16 * scale)
-        self.alert = _font("NotoSans-Bold.ttf", 22 * scale)
+        self.hero = _font("DejaVuSans-Bold.ttf", 56 * scale)
+        self.hero_small = _font("DejaVuSans-Bold.ttf", 38 * scale)
+        self.label = _font("DejaVuSans-Bold.ttf", 12 * scale)
+        self.value = _font("DejaVuSans-Bold.ttf", 24 * scale)
+        self.unit = _font("DejaVuSans-Bold.ttf", 13 * scale)
+        self.small = _font("DejaVuSans-Bold.ttf", 11 * scale)
+        self.foot_label = _font("DejaVuSans-Bold.ttf", 10 * scale)
+        self.foot_value = _font("DejaVuSans-Bold.ttf", 16 * scale)
+        self.alert = _font("DejaVuSans-Bold.ttf", 22 * scale)
 
 
 @dataclass

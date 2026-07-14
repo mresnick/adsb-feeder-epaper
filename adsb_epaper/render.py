@@ -37,11 +37,12 @@ class Fonts:
         self.header = _font("DejaVuSans-Bold.ttf", 13 * scale)
         self.hero = _font("DejaVuSans-Bold.ttf", 60 * scale)
         self.hero_small = _font("DejaVuSans-Bold.ttf", 40 * scale)
-        self.label = _font("DejaVuSans.ttf", 11 * scale)
+        # everything bold: 1px stems don't develop reliably on B/W/R panels
+        self.label = _font("DejaVuSans-Bold.ttf", 11 * scale)
         self.value = _font("DejaVuSans-Bold.ttf", 24 * scale)
-        self.unit = _font("DejaVuSans.ttf", 12 * scale)
-        self.small = _font("DejaVuSans.ttf", 10 * scale)
-        self.foot_label = _font("DejaVuSans.ttf", 9 * scale)
+        self.unit = _font("DejaVuSans-Bold.ttf", 12 * scale)
+        self.small = _font("DejaVuSans-Bold.ttf", 10 * scale)
+        self.foot_label = _font("DejaVuSans-Bold.ttf", 9 * scale)
         self.foot_value = _font("DejaVuSans-Bold.ttf", 15 * scale)
         self.alert = _font("DejaVuSans-Bold.ttf", 22 * scale)
 
@@ -240,7 +241,9 @@ def _tiles(c: Canvas, f: Fonts, v: View) -> None:
 def _sparkline(c: Canvas, f: Fonts, v: View) -> None:
     x0, x1 = 10, WIDTH - 10
     top, base = SPARK_TOP + 14, FOOT_TOP - 6
-    c.text((x0, SPARK_TOP), f"aircraft · last {v.history_hours} h", f.small)
+    caption = f"aircraft · last {v.history_hours} h"
+    c.text((x0, SPARK_TOP), caption, f.small)
+    caption_end = x0 + c.text_w(caption, f.small)
 
     now = time.time()
     span = v.history_hours * 3600
@@ -270,8 +273,8 @@ def _sparkline(c: Canvas, f: Fonts, v: View) -> None:
 
     c.line((x0, base, x1, base))
 
-    # selective direct label: the peak only
-    peak_x = min(max(x0 + peak_i * step, x0 + 8), x1 - 12)
+    # selective direct label: the peak only (kept clear of the caption)
+    peak_x = min(max(x0 + peak_i * step, caption_end + 16), x1 - 12)
     c.text((peak_x, top - 11), str(max(buckets)), f.small, anchor="mm")
 
 

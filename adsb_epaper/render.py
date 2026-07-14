@@ -33,18 +33,24 @@ def _font(name: str, size: int) -> ImageFont.FreeTypeFont:
 
 
 class Fonts:
+    """B612 Bold throughout: Airbus' cockpit-display font, designed to stay
+    legible under degraded viewing conditions -- its square open terminals
+    survive 1-bit rendering where DejaVu's tapered stroke ends washed out
+    on the panel.  Everything bold: 1px stems don't develop reliably on
+    B/W/R e-paper.  DejaVu is kept for the ✈ glyph, which B612 lacks."""
+
     def __init__(self, scale: int = 1) -> None:
-        self.header = _font("DejaVuSans-Bold.ttf", 13 * scale)
-        self.hero = _font("DejaVuSans-Bold.ttf", 60 * scale)
-        self.hero_small = _font("DejaVuSans-Bold.ttf", 40 * scale)
-        # everything bold: 1px stems don't develop reliably on B/W/R panels
-        self.label = _font("DejaVuSans-Bold.ttf", 11 * scale)
-        self.value = _font("DejaVuSans-Bold.ttf", 24 * scale)
-        self.unit = _font("DejaVuSans-Bold.ttf", 12 * scale)
-        self.small = _font("DejaVuSans-Bold.ttf", 10 * scale)
-        self.foot_label = _font("DejaVuSans-Bold.ttf", 9 * scale)
-        self.foot_value = _font("DejaVuSans-Bold.ttf", 15 * scale)
-        self.alert = _font("DejaVuSans-Bold.ttf", 22 * scale)
+        self.header = _font("B612-Bold.ttf", 13 * scale)
+        self.glyph = _font("DejaVuSans-Bold.ttf", 13 * scale)
+        self.hero = _font("B612-Bold.ttf", 56 * scale)
+        self.hero_small = _font("B612-Bold.ttf", 38 * scale)
+        self.label = _font("B612-Bold.ttf", 11 * scale)
+        self.value = _font("B612-Bold.ttf", 24 * scale)
+        self.unit = _font("B612-Bold.ttf", 12 * scale)
+        self.small = _font("B612-Bold.ttf", 10 * scale)
+        self.foot_label = _font("B612-Bold.ttf", 9 * scale)
+        self.foot_value = _font("B612-Bold.ttf", 15 * scale)
+        self.alert = _font("B612-Bold.ttf", 22 * scale)
 
 
 @dataclass
@@ -175,8 +181,10 @@ FOOT_TOP = 202
 
 def _header(c: Canvas, f: Fonts, v: View) -> None:
     c.rect((0, 0, WIDTH, HDR_H - 1), fill=BLACK)
-    title = "✈ ADS-B FEEDER"
-    c.text((8, HDR_H // 2), title, f.header, fill=WHITE, anchor="lm")
+    c.text((8, HDR_H // 2), "✈", f.glyph, fill=WHITE, anchor="lm")
+    title = "ADS-B FEEDER"
+    title_x = 8 + c.text_w("✈ ", f.glyph)
+    c.text((title_x, HDR_H // 2), title, f.header, fill=WHITE, anchor="lm")
 
     # power alerts live in the header, right after the title
     chips = []
@@ -184,7 +192,7 @@ def _header(c: Canvas, f: Fonts, v: View) -> None:
         chips.append("! PWR")
     if v.throttled:
         chips.append("! THROTTLE")
-    chip_end = 8 + c.text_w(title, f.header)
+    chip_end = title_x + c.text_w(title, f.header)
     if chips:
         s = "  ".join(chips)
         x0 = chip_end + 18

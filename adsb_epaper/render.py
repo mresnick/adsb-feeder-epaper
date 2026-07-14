@@ -33,24 +33,24 @@ def _font(name: str, size: int) -> ImageFont.FreeTypeFont:
 
 
 class Fonts:
-    """B612 Bold throughout: Airbus' cockpit-display font, designed to stay
-    legible under degraded viewing conditions -- its square open terminals
-    survive 1-bit rendering where DejaVu's tapered stroke ends washed out
-    on the panel.  Everything bold: 1px stems don't develop reliably on
-    B/W/R e-paper.  DejaVu is kept for the ✈ glyph, which B612 lacks."""
+    """Noto Serif Bold for content, sized a step up from the original
+    design; sturdy e-reader-style book serifs hold up well on e-paper.
+    Everything bold: 1px stems don't develop reliably on B/W/R panels.
+    The header bar and its ✈ glyph stay DejaVu Sans Bold -- knocked-out
+    text on black reads better without fine serifs."""
 
     def __init__(self, scale: int = 1) -> None:
-        self.header = _font("B612-Bold.ttf", 13 * scale)
+        self.header = _font("DejaVuSans-Bold.ttf", 13 * scale)
         self.glyph = _font("DejaVuSans-Bold.ttf", 13 * scale)
-        self.hero = _font("B612-Bold.ttf", 56 * scale)
-        self.hero_small = _font("B612-Bold.ttf", 38 * scale)
-        self.label = _font("B612-Bold.ttf", 11 * scale)
-        self.value = _font("B612-Bold.ttf", 24 * scale)
-        self.unit = _font("B612-Bold.ttf", 12 * scale)
-        self.small = _font("B612-Bold.ttf", 10 * scale)
-        self.foot_label = _font("B612-Bold.ttf", 9 * scale)
-        self.foot_value = _font("B612-Bold.ttf", 15 * scale)
-        self.alert = _font("B612-Bold.ttf", 22 * scale)
+        self.hero = _font("NotoSerif-Bold.ttf", 56 * scale)
+        self.hero_small = _font("NotoSerif-Bold.ttf", 38 * scale)
+        self.label = _font("NotoSerif-Bold.ttf", 12 * scale)
+        self.value = _font("NotoSerif-Bold.ttf", 24 * scale)
+        self.unit = _font("NotoSerif-Bold.ttf", 13 * scale)
+        self.small = _font("NotoSerif-Bold.ttf", 11 * scale)
+        self.foot_label = _font("NotoSerif-Bold.ttf", 10 * scale)
+        self.foot_value = _font("NotoSerif-Bold.ttf", 16 * scale)
+        self.alert = _font("NotoSerif-Bold.ttf", 22 * scale)
 
 
 @dataclass
@@ -234,7 +234,7 @@ def _tiles(c: Canvas, f: Fonts, v: View) -> None:
         if unit:
             c.text((x + vw + 4, y + 24), unit, f.unit)
         if sub:
-            c.text((x, y + 44), sub, f.small)
+            c.text((x, y + 46), sub, f.small)
 
     ax, bx = 132, 248
     r1, r2 = HDR_H + 12, HDR_H + 76
@@ -315,10 +315,10 @@ def _footer(c: Canvas, f: Fonts, v: View) -> None:
             c.text((cx, FOOT_TOP + 27), f"! {value}", f.foot_value, layer="r",
                    fill=WHITE, anchor="mm")
             continue
-        c.text((cx, FOOT_TOP + 11), label, f.foot_label, anchor="mm")
-        c.text((cx, FOOT_TOP + 24), value, f.foot_value, anchor="mm")
+        c.text((cx, FOOT_TOP + 10), label, f.foot_label, anchor="mm")
+        c.text((cx, FOOT_TOP + 23), value, f.foot_value, anchor="mm")
         if pct is not None:
-            c.meter(cx - 20, HEIGHT - 7, 40, 4, pct)
+            c.meter(cx - 20, HEIGHT - 6, 40, 4, pct)
 
 
 def render(v: View, scale: int = 1) -> tuple[Image.Image, Image.Image]:

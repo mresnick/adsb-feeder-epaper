@@ -249,7 +249,6 @@ def _sparkline(c: Canvas, f: Fonts, v: View) -> None:
     top, base = SPARK_TOP + 14, FOOT_TOP - 6
     caption = f"aircraft · last {v.history_hours} h"
     c.text((x0, SPARK_TOP), caption, f.small)
-    caption_end = x0 + c.text_w(caption, f.small)
 
     now = time.time()
     span = v.history_hours * 3600
@@ -268,7 +267,6 @@ def _sparkline(c: Canvas, f: Fonts, v: View) -> None:
         buckets[i] = max(buckets[i], n)
 
     vmax = max(max(buckets), 5)
-    peak_i = buckets.index(max(buckets))
     hgt = base - top
     for i, n in enumerate(buckets):
         if n <= 0:
@@ -278,10 +276,6 @@ def _sparkline(c: Canvas, f: Fonts, v: View) -> None:
         c.rect((x, base - h, x + 2, base), fill=BLACK)
 
     c.line((x0, base, x1, base))
-
-    # selective direct label: the peak only (kept clear of the caption)
-    peak_x = min(max(x0 + peak_i * step, caption_end + 16), x1 - 12)
-    c.text((peak_x, top - 11), str(max(buckets)), f.small, anchor="mm")
 
 
 def _footer(c: Canvas, f: Fonts, v: View) -> None:

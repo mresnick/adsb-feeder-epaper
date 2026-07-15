@@ -38,8 +38,8 @@ class Fonts:
     B/W/R panels."""
 
     def __init__(self, scale: int = 1) -> None:
-        self.header = _font("DejaVuSans-Bold.ttf", 13 * scale)
-        self.glyph = _font("DejaVuSans-Bold.ttf", 13 * scale)
+        self.header = _font("DejaVuSans-Bold.ttf", 16 * scale)
+        self.glyph = _font("DejaVuSans-Bold.ttf", 16 * scale)
         self.hero = _font("DejaVuSans-Bold.ttf", 56 * scale)
         self.hero_small = _font("DejaVuSans-Bold.ttf", 38 * scale)
         self.label = _font("DejaVuSans-Bold.ttf", 12 * scale)
@@ -172,7 +172,7 @@ class Canvas:
 
 # -- sections ---------------------------------------------------------------------
 
-HDR_H = 24
+HDR_H = 26
 SPARK_TOP = 158
 FOOT_TOP = 202
 

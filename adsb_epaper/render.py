@@ -106,16 +106,16 @@ def _dist(nm: float | None, units: str) -> tuple[str, str]:
 
 
 def _uptime(s: float | None) -> str:
+    """Largest unit only -- glanceable, and fits its footer cell."""
     if s is None:
         return "--"
     d, rem = divmod(int(s), 86400)
     h, rem = divmod(rem, 3600)
-    m = rem // 60
     if d > 0:
-        return f"{d}d{h}h"
+        return f"{d}d"
     if h > 0:
-        return f"{h}h{m}m"
-    return f"{m}m"
+        return f"{h}h"
+    return f"{rem // 60}m"
 
 
 # -- two-layer canvas -----------------------------------------------------------
@@ -178,11 +178,12 @@ FOOT_TOP = 202
 
 
 def _header(c: Canvas, f: Fonts, v: View) -> None:
-    c.rect((0, 0, WIDTH, HDR_H - 1), fill=BLACK)
-    c.text((8, HDR_H // 2), "✈", f.glyph, fill=WHITE, anchor="lm")
+    # black on white: knocked-out text never developed cleanly on the panel
+    c.line((0, HDR_H - 1, WIDTH, HDR_H - 1))
+    c.text((8, HDR_H // 2), "✈", f.glyph, anchor="lm")
     title = "ADS-B FEEDER"
     title_x = 8 + c.text_w("✈ ", f.glyph)
-    c.text((title_x, HDR_H // 2), title, f.header, fill=WHITE, anchor="lm")
+    c.text((title_x, HDR_H // 2), title, f.header, anchor="lm")
 
     # power alerts live in the header, right after the title
     chips = []
@@ -201,7 +202,7 @@ def _header(c: Canvas, f: Fonts, v: View) -> None:
     right = v.time_str if v.ip is None else f"{v.ip}   {v.time_str}"
     if 8 + c.text_w(right, f.header) + chip_end > WIDTH:
         right = v.time_str  # not enough room; the IP yields to the alert
-    c.text((WIDTH - 8, HDR_H // 2), right, f.header, fill=WHITE, anchor="rm")
+    c.text((WIDTH - 8, HDR_H // 2), right, f.header, anchor="rm")
 
 
 def _hero(c: Canvas, f: Fonts, v: View) -> None:
